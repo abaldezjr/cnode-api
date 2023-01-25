@@ -1,0 +1,27 @@
+{
+  "name": "rest-api",
+  "version": "1.0.0",
+  "description": "Teste de rest api para tutorial",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abaldezjr/cnode-api.git"
+  },
+  "keywords": [
+    "node",
+    "tutorial",
+    "youtube"
+  ],
+  "author": "baldezjr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abaldezjr/cnode-api/issues"
+  },
+  "homepage": "https://github.com/abaldezjr/cnode-api#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
