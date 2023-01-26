@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const mysql = require('../mysql').pool;
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 //LISTAR USUARIOS
 router.get('/', (req, res, next) => {
@@ -50,36 +52,59 @@ router.post('/', (req, res, next) => {
                 error: error
             });
         }
-        conn.query(
-            'INSERT INTO users(username, password) VALUES (?, ?)',
-            [req.body.username, req.body.password],
-            (error, results, fields) => {
-                conn.release();
+
+        conn.query('SELECT * FROM users WHERE username = ?',
+            [req.body.username], (error, results) => {
                 if (error) {
                     return res.status(500).send({
-                        error: error,
-                        response: null
+                        error: error
                     });
                 }
 
-                const response = {
-                    message: 'Usuario cadastrado',
-                    newUser: {
-                        user_id: results.insertId,
-                        username: req.body.username,
-                        request: {
-                            type: 'POST',
-                            description: 'Cadastrar usuario',
-                            url: `http://localhost:3000/usuarios`
+                if (results.length > 0) {
+                    res.status(401).send({
+                        message: 'Usuário já cadastrado'
+                    });
+                } else {
+                    bcrypt.hash(req.body.password, 10, (errorBcrypt, hash) => {
+                        if (errorBcrypt) {
+                            return res.status(500).send({ error: errorBcrypt });
                         }
-                    }
+
+                        conn.query(
+                            'INSERT INTO users(username, password) VALUES (?, ?)',
+                            [req.body.username, hash],
+                            (error, results, fields) => {
+
+                                conn.release();
+                                if (error) {
+                                    return res.status(500).send({
+                                        error: error,
+                                        response: null
+                                    });
+                                }
+
+                                const response = {
+                                    message: 'Usuario cadastrado',
+                                    newUser: {
+                                        user_id: results.insertId,
+                                        username: req.body.username,
+                                        request: {
+                                            type: 'POST',
+                                            description: 'Cadastrar usuario',
+                                            url: `http://localhost:3000/usuarios`
+                                        }
+                                    }
+                                }
+                                return res.status(201).send(response);
+                            });
+                    });
                 }
-                return res.status(201).send(response);
             });
     });
 });
 
-//LISTA UM USUARIO
+//LISTAR UM USUARIO
 router.get('/:user_id', (req, res, next) => {
 
     mysql.getConnection((error, conn) => {
@@ -164,7 +189,7 @@ router.patch('/', (req, res, next) => {
     });
 });
 
-//ATUALIZAR USUARIO
+//DELETAR USUARIO
 router.delete('/', (req, res, next) => {
     mysql.getConnection((error, conn) => {
         if (error) {
@@ -203,37 +228,50 @@ router.delete('/', (req, res, next) => {
 
 //LOGIN
 router.post('/login', (req, res, next) => {
-    /*mysql.getConnection(
+
+    mysql.getConnection(
         (error, conn) => {
             if (error) {
                 return res.status(500).send({ error: error });
             }
-            const query = "SELECT * FROM USUARIOS WHERE email = ?";
-            conn.query(query.body.email, (errors, results, fileds) => {
-                conn.release();
-                if (error) {
-                    return res.status(500).send({ error: error });
-                }
- 
-                if(results.length < 1) {
-                    return res.status(401).send({mensagem: 'Falha na autenticação.'});
-                }
-            });
+
+            conn.query("SELECT * FROM users WHERE username = ?",
+                [req.body.username], (errors, results, fileds) => {
+                    conn.release();
+                    if (error) {
+                        return res.status(500).send({ error: error });
+                    }
+
+                    if (results.length < 1) {
+                        return res.status(401).send({ mensagem: 'Falha na autenticação.' });
+                    }
+
+                    bcrypt.compare(req.body.password, results[0].password, (error, result) => {
+                        if (error) {
+                            return res.status(401).send({ mensagem: 'Falha na autenticação.' });
+                        }
+
+                        if (result) {
+                            const token = jwt.sign({
+                                user_id: results[0].user_id,
+                                username: results[0].username,
+                            }, 
+                            process.env.JWT_KEY,{
+                                expiresIn: "1h"
+                            }
+                            );
+                            return res.status(200).send({ 
+                                mensagem: 'Autenticado com sucesso.',
+                                token: token
+                            });
+                        }
+                        return res.status(401).send({ mensagem: 'Falha na autenticação.' });
+                    });
+
+                });
         }
     );
-    res.json({
-        message: 'login'
-    });*/
-    res.status(200).send({
-        message: '[post] Rota: usuarios/login'
-    });
-});
 
-//LOGOUT
-router.post('/logout', (req, res) => {
-    res.json({
-        message: 'logout'
-    });
 });
 
 module.exports = router;

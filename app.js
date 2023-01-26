@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const userRoute = require('./routes/users');
+const partnerRoute = require('./routes/partners');
 
 app.use(
     express.urlencoded({
@@ -28,7 +29,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/usuarios', userRoute);
-
+app.use('/parceiros', partnerRoute);
 
 app.post('/', (req, res) => {
 

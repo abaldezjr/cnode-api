@@ -4,6 +4,7 @@
         "MYSQL_PASSWORD": "ludovic",
         "MYSQL_DATABASE": "appcartao",
         "MYSQL_HOST": "localhost",
-        "MYSQL_PORT": 3306
+        "MYSQL_PORT": 3306,
+        "JWT_KEY": "meusegredosecreto"
     }
 }
