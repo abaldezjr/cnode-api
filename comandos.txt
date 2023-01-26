@@ -18,4 +18,10 @@ INSTALAÇÃO DO MORGAN
 npm install --save-dev morgan
 
 INSTALAÇÃO DO MYSQL
-npm install --save mysql
+npm install --save mysql2
+
+INSTALAÇÃO DO BCRYPT
+npm install --save bcrypt
+
+INSTALAÇÃO DO JSON WEB TOKEN
+npm install jsonwebtoken --save

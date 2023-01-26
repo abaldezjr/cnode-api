@@ -1,13 +1,5 @@
 const mysql = require('mysql2');
 
-/*var pool = mysql.createPool({
-    "user": "root",
-    "password": "ludovic",
-    "database": "usuarios",
-    "host": "localhost",
-    "port": 3306
-});*/
-
 var pool = mysql.createPool({
     "user": process.env.MYSQL_USER,
     "password": process.env.MYSQL_PASSWORD,
