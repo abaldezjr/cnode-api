@@ -23,6 +23,11 @@
   },
   "homepage": "https://github.com/abaldezjr/cnode-api#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.0.1"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0"
   }
 }

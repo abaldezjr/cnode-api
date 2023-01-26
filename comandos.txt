@@ -1,2 +1,21 @@
+
+SE NÃO EXISTE PROJETO AINDA
 npm init
 
+SE EXISTE PROJETO QUANDO BAIXAR DO GITHUB UTILIZAR ESTE COMANDO
+npm install 
+
+INSTALAÇÃO DO EXPRESS
+npm install --save express
+
+INSTALAÇÃO DO NODEMON
+npm install --save nodemon
+
+INSTALAÇÃO DO MONGOOSE
+npm install --save mongoose
+
+INSTALAÇÃO DO MORGAN
+npm install --save-dev morgan
+
+INSTALAÇÃO DO MYSQL
+npm install --save mysql
