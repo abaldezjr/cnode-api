@@ -1,5 +1,4 @@
 const mysql = require('../mysql').pool;
-const login = require('../middleware/login');
 
 //LISTAR PARCEIROS
 exports.getPartners = (req, res, next) => {

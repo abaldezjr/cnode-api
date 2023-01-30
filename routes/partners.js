@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const login = require('../middleware/login');
-const partnerController = require('../controllers/PartnerController');
+const partnerController = require('../controller/PartnerController');
 
 /*
     ROTAS PRIVADAS

@@ -4,13 +4,8 @@ const morgan = require('morgan');
 const userRoute = require('./routes/users');
 const partnerRoute = require('./routes/partners');
 
-app.use(
-    express.urlencoded({
-        extended: true
-    })
-);
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(morgan('dev'));
 
